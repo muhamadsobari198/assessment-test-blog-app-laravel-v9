@@ -26,7 +26,7 @@ class isVerified
                 if(!in_array($ROLE, $SETTING[$URL])){
                     
                     echo "Anda tidak memiliki hak akses ke halaman ini.";
-                    exit();
+                    return redirect()->back();
 
                 }
 

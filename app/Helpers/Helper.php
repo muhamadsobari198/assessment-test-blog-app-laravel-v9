@@ -25,7 +25,9 @@ function _settingSidebar()
     */
 
 	$setting = [
-		'admin/articles'    => [1],
+		'admin/users'    => [1],
+		'admin/articles'    => [1,2],
+
 	];
 
 	return $setting;
