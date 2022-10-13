@@ -13,5 +13,6 @@ Route::group(['middleware' => 'auth.token'], function(){
         Route::post('create', [ArticleController::class, 'store']);
         Route::post('update/{id}', [ArticleController::class, 'update']);
         Route::delete('delete/{id}', [ArticleController::class, 'delete']);
+        Route::post('data-table', [ArticleController::class, 'dataTable']);
     });
 });

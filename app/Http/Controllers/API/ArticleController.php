@@ -30,6 +30,106 @@ class ArticleController extends Controller
         return view('admin.master.article');
     }
 
+    
+    protected function articleTable($type= "search", $start, $limit, $order, $dir, $search = '') {
+        if($type == 'search') {
+
+            return Article::select(
+                'articles.*',
+                'users.name'
+            )
+            ->leftJoin('users', 'users.id', '=', 'articles.created_by')
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('id', 'LIKE', "%{$search}%")
+            ->orWhere('content', 'LIKE', "%{$search}%")
+            ->offset($start)
+            ->limit($limit)
+            ->orderBy($order, $dir)
+            ->get();
+
+        } else{
+
+            return Article::select(
+                'articles.*',
+                'users.name'
+            )
+            ->leftJoin('users', 'users.id', '=', 'articles.created_by')
+            ->offset($start)
+            ->limit($limit)
+            ->orderBy($order, $dir)
+            ->get();
+
+        }
+    }
+
+
+    public function dataTable(Request $request)
+    {
+        try {
+            $columns = ['id', null,'title', 'content', 'created_by', 'created_at', 'updated_at'];
+
+            $limit = $request->input('length');
+            $start = $request->input('start');
+            $order = $columns[$request->input('order.0.column')];
+            $dir   = $request->input('order.0.dir');
+
+            $data          = array();
+            $totalData     = Article::count();
+            $totalFiltered = $totalData;
+            $posts	       = '';
+
+
+            if(!empty($request->input('search.value'))) {
+                
+                $search = $request->input('search.value');
+
+                $posts = Cache::remember('article:all'.$start.''.$search, 10, function () use ($start, $limit, $order, $dir, $search ) {
+                    return $this->articleTable('search', $start, $limit, $order, $dir, $search);
+                });
+                
+
+                $totalFiltered = count($posts);
+
+            } else {
+
+                $posts = Cache::rememberForever('article:all'.$start, function () use ($start, $limit, $order, $dir ) {
+                    return $this->articleTable('others', $start, $limit, $order, $dir);
+                });
+
+            }
+
+            if (!empty($posts)) {
+                $no  = $start + 1;
+                $row = 0;
+
+                foreach ($posts as $a) {
+                    $d['no']         = $no++;
+                    $d['id']   = $a['id'];
+                    $d['image'] = $a['image'];
+                    $d['title'] = $a['title'];
+                    $d['content'] = $a['content'];
+                    $d['created_by'] = $a->createdBy->name;
+                    $d['created_at'] = date($a['created_at']);
+                    $d['updated_at'] = date($a['updated_at']);
+                    $row++;
+                    $data[] = $d;
+
+                }
+            }
+
+            $json_data = array("draw" => intval($request->input('draw')), "recordsTotal" => intval($totalData), "recordsFiltered" => intval($totalFiltered), "data" => $data);
+
+            return json_encode($json_data);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terdapat kesalahan pada sistem internal.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     public function store(ArticleRequest $request)
     {
 
