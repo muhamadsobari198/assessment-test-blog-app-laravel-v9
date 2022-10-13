@@ -3,6 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\ArticleController;
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Article Content                              */
+/* -------------------------------------------------------------------------- */
+Route::get('/', [ArticleController::class, 'index']);
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                                    Auth                                    */
 /* -------------------------------------------------------------------------- */

@@ -8,6 +8,8 @@ use App\Http\Requests\ArticleRequest;
 use Illuminate\Http\Request;
 
 use Exception;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Models\User;
 use App\Models\Article;
@@ -18,6 +20,22 @@ class ArticleController extends Controller
     /*                                  FrontEnd                                  */
     /* -------------------------------------------------------------------------- */
 
+    public function index()
+    {
+        
+        $articles = Cache::rememberForever('article:all', function() {
+            return Article::orderBy('created_at', 'desc')->get();
+        });
+        
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $collection = new Collection($articles);
+        $perPage = 4;
+        $results = $collection->slice(($currentPage - 1) * $perPage, $perPage)->sortByDesc('created_at')->all();
+       
+        return view('public.article.index', [
+            'articles' => new LengthAwarePaginator($results, count($collection), $perPage)
+        ]);
+    }
 
 
 
