@@ -62,6 +62,108 @@
 
 </body>
 <script>
+
+var imageNotFound = () => 'https://zoomnearby.com/resources/media/images/common/Image-not-found.jpg'
+
+
+function __getId(name) {
+	return document.getElementById(name);
+}
+
+function porpertyPOST(body) {
+	return {
+		headers: __headers(),
+		method: 'POST',
+		body: JSON.stringify(body)
+	};
+}
+
+function __headers() {
+	return {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		Accept: 'application/json, text/plain, */*',
+		'Content-type': 'application/json',
+		Authorization: "Bearer {{ Session::get('token') }}"
+	};
+}
+
+
+function __querySelectorAll(tag) {
+	return document.querySelectorAll(tag);
+}
+
+function __querySelector(tag) {
+	return document.querySelector(tag);
+}
+
+
+function ___iconLoading(color = 'white', width = 25) {
+    return `<svg width="${width}" viewBox="-2 -2 42 42" xmlns="http://www.w3.org/2000/svg" stroke=${color} class="w-4 h-4 ml-3">
+        <g fill="none" fill-rule="evenodd">
+            <g transform="translate(1 1)" stroke-width="4">
+                <circle stroke-opacity=".5" cx="18" cy="18" r="18"></circle>
+                <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(114.132 18 18)">
+                    <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"></animateTransform>
+                </path>
+            </g>
+        </g>
+    </svg>`;
+}
+
+function __modalManage(name, type) {
+    switch(type) {
+        case 'hide':
+            $(`${name}`).modal("hide");
+        break;
+        case 'show':
+            $(`${name}`).modal("show");
+        break;
+    }
+}
+
+
+
+function __manageError(elm_name) {
+	$(`${elm_name} input.has-error`).removeClass('has-error');
+	$(`${elm_name} textarea.has-error`).removeClass('has-error');
+	$(`${elm_name} select.has-error`).removeClass('has-error');
+	$(`${elm_name} .help-inline.text-danger`).remove()
+}
+
+
+function __resetForm(elm_name) {
+	for(const elm of elm_name) {
+		elm.value = '';
+		if(elm.type == 'select-one') {
+			elm.dispatchEvent(new Event("change", {bubbles: true,}));
+		}
+	}
+}
+
+
+var rulesValidateGlobal = {
+	onfocusout: (elm) => {
+		return $(elm).valid();
+	},
+	ignore: [],
+	errorClass: 'error',
+	errorElement: 'span',
+	errorClass: 'help-inline text-danger',
+	errorElement: 'span',
+	highlight: (elm, errorClass, validClass) => {
+		$(elm).addClass('has-error');
+	},
+	unhighlight: (elm, errorClass, validClass) => {
+		$(elm).removeClass('has-error');
+	},
+	errorPlacement: function(error, elm) {
+		if (elm.hasClass('select2-hidden-accessible')) {
+			error.insertAfter(elm.next('.select2.select2-container.select2-container--default'));
+		} else {
+			error.insertAfter(elm);
+		}
+	}
+};
 </script>
 
 @yield('js')
