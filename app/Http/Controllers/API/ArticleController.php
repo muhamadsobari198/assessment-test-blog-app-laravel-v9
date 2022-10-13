@@ -71,4 +71,80 @@ class ArticleController extends Controller
 
     }
 
+
+    public function update(ArticleRequest $request, $id)
+    {
+      
+        $otherRules = [];
+
+        if($request->file('file')) {
+            $otherRules['file'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+        }
+
+        $request->validate($otherRules);
+
+        try {
+
+            $article = Article::where('id', $id);
+            
+            if($request->file('file')) {
+
+                __deleteFile($article->first()->image);
+
+                $request['image'] = __uploadFile(
+                    $request->file('file'),
+                    'public'
+                );
+
+            }
+
+            Cache::flush();
+
+            $article->update($request->except('file'));
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Article berhasil diperbarui.',
+            ], 200);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terdapat kesalahan pada sistem internal.',
+                'error'   => $e->getMessage()
+            ], 500);
+
+        }
+    }
+
+    public function delete($id)
+    {
+
+        try {
+            
+            $article = Article::where('id', $id);
+
+            __deleteFile($article->first()->image);
+
+            $article->delete();
+
+            Cache::flush();
+            
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Article berhasil dihapus.',
+            ], 200);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terdapat kesalahan pada sistem internal.',
+                'error'   => $e->getMessage()
+            ], 500);
+
+        }
+    }
 }
