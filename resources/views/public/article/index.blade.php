@@ -24,7 +24,7 @@
             
         <div class="w-full p-5">  
             <div class="rounded overflow-hidden shadow-lg flex">
-            <img class="w-full" src="{{ $firstArticle->image }}" style="height: 180px !important; width: 60%; object-fit: cover;">
+            <img class="w-full" src="{{ $firstArticle->image }}" style="height: 250px !important; width: 60%; object-fit: cover;">
             <div class="px-6 py-4 px-6 py-4 flex flex-col justify-between w-full">
                 <div>
                     <div class="font-bold text-xl">{{ $firstArticle->title }}</div>
