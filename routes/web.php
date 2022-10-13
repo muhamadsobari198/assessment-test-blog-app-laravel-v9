@@ -12,6 +12,12 @@ Route::post('login', [AuthController::class, 'onLogin']);
 Route::get('logout', [AuthController::class, 'onLogout'])->name('logout');
 Route::get('verify-token/{token}', [AuthController::class, 'verifyToken']);
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('articles', [ArticleController::class, 'main'])->name('articles');
+
+/* -------------------------------------------------------------------------- */
+/*                                  Admin Panel                               */
+/* -------------------------------------------------------------------------- */
+Route::group(['middleware' => 'admin'], function(){
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('articles', [ArticleController::class, 'main'])->name('articles');
+    });
 });
