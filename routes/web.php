@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ArticleController;
 
 
@@ -28,6 +29,7 @@ Route::get('verify-token/{token}', [AuthController::class, 'verifyToken']);
 /* -------------------------------------------------------------------------- */
 Route::group(['middleware' => 'admin'], function(){
     Route::group(['prefix' => 'admin'], function () {
+        Route::get('users', [UserController::class, 'index'])->name('users');
         Route::get('articles', [ArticleController::class, 'main'])->name('articles');
     });
 });
