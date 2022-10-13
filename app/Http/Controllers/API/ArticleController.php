@@ -37,6 +37,18 @@ class ArticleController extends Controller
         ]);
     }
 
+    public function show($id) {
+        
+        $article = Cache::rememberForever('article:' . $id, function () use ($id) {
+            return Article::findOrFail($id);
+        });
+
+        return view('public.article.detail', [
+            'article' => $article
+        ]);
+    }
+
+
 
 
     /* -------------------------------------------------------------------------- */

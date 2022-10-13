@@ -43,7 +43,7 @@
                     </div>
 
                     <div>
-                        <a href="/articles/{{ $firstArticle->slug }}"
+                        <a href="/articles/{{ $firstArticle->id }}"
                         class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8"
                         >Read More</a>
                     </div>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div>
-                        <a href="/articles/{{ $article->slug }}"
+                        <a href="/articles/{{ $article->id }}"
                         class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8"
                         >Read More</a>
                     </div>
