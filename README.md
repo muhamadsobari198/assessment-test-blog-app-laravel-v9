@@ -16,7 +16,7 @@
 
 Setup environment dilocal :
 ```bash
-$ git clone git@github.com:muhamadsobari198/assessment-test-blog-app-laravel-v9.git
+$ git clone git@github.com:muhamadsobari198/blog-app-laravel-v9-by-m-sobari.git
 $ cd assessment-test-blog-app-laravel-v9
 $ cp .env.example .env
 $ composer install
